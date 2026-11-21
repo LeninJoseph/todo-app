@@ -1,0 +1,28 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: fastapi_mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: my_fastapi_db # <-- Automatically creates this database
+      MYSQL_USER: fastapi_user # <-- Optional: creates a non-root user
+      MYSQL_PASSWORD: userpassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql # <-- Persists data when container stops
+
+  redis:
+    image: redis:7-alpine
+    container_name: todo-redis-cache
+    restart: always
+    command: redis-server --appendonly yes --requirepass my-redis-pw
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+
+volumes:
+  mysql-data:
+  redis-data:
